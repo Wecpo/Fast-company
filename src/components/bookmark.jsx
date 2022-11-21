@@ -1,19 +1,19 @@
 import React from "react";
 
-const BookMark = ({ status, ...rest }) => {
+const BookMark = ({ status, onToggleBookMark }) => {
   if (status) {
     return (
       <td>
         <i
           className="bi bi-patch-check-fill"
-          onClick={rest.onToggleBookMark}
+          onClick={onToggleBookMark}
         ></i>
       </td>
     );
   } else {
     return (
       <td>
-        <i className="bi bi-patch-check" onClick={rest.onToggleBookMark}></i>
+        <i className="bi bi-patch-check" onClick={onToggleBookMark}></i>
       </td>
     );
   }
