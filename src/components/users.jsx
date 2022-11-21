@@ -1,7 +1,7 @@
 import React from "react";
 import User from "./user";
 
-const Users = ({ users, ...rest }) => {
+const Users = ({ users, onDelete, onToggleBookMark }) => {
   if (users.length > 0) {
     return (
       <table className="table">
@@ -20,9 +20,9 @@ const Users = ({ users, ...rest }) => {
           return (
             <User
               key={item._id}
-              onDelete={rest}
-              onToggleBookMark={rest}
               {...item}
+              onDelete={onDelete}
+              onToggleBookMark={onToggleBookMark}
             />
           );
         })}

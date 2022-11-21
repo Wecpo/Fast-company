@@ -13,13 +13,11 @@ const User = (props) => {
         <td>{props.rate + " / 5"}</td>
         <Bookmark
           status={props.bookmark}
-          onToggleBookMark={() =>
-            props.onToggleBookMark.onToggleBookMark(props._id)
-          }
+          onToggleBookMark={() => props.onToggleBookMark(props._id)}
         />
         <td>
           <button
-            onClick={() => props.onDelete.onDelete(props._id)}
+            onClick={() => props.onDelete(props._id)}
             className="badge bg-danger"
           >
             delete
