@@ -7,7 +7,6 @@ import api from "../api";
 import SearchStatus from "./searchStatus";
 import UserTable from "./usersTable";
 import _ from "lodash";
-import TextField from "./textField";
 
 const UsersList = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -97,7 +96,6 @@ const UsersList = () => {
                 )}
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
-                    <TextField type="search"/>
                     {count > 0 && (
                         <UserTable
                             users={usersCrop}
