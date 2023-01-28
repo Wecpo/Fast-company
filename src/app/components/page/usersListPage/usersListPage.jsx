@@ -61,7 +61,7 @@ const UsersListPage = () => {
 
     const handleSearch = (e) => {
         selectedProf && setSelectedProf();
-        setSearchBy(e.target.value);
+        setSearchBy(e.value);
     };
 
     if (users) {
@@ -112,6 +112,7 @@ const UsersListPage = () => {
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
                     <TextField
+                        name="searchField"
                         onChange={handleSearch}
                         placeholder="Search..."
                         value={searchBy}
