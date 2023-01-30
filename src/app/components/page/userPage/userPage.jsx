@@ -13,7 +13,7 @@ const UserPage = ({ userId }) => {
     }, []);
 
     const handleClick = () => {
-        history.push(userId + "/edit");
+        history.push(history.location.pathname + "/edit");
     };
 
     if (user) {
