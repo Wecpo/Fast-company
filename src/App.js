@@ -7,24 +7,28 @@ import UserEditPage from "./app/components/page/userEditPage/userEditPage";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { ProfessionProvider } from "./app/hooks/useProfession";
+import { QualitiesProvider } from "./app/hooks/useQualities";
 
 function App() {
     return (
         <div>
             <NavBar />
-            <Switch>
-                <ProfessionProvider>
-                    <Route
-                        path="/users/:userId?/edit"
-                        exact
-                        component={UserEditPage}
-                    />
-                    <Route path="/users/:userId?" exact component={Users} />
-                    <Route path="/login/:type?" component={Login} />
-                </ProfessionProvider>
-                <Route path="/" component={Main} />
-                <Redirect to="/" />
-            </Switch>
+            <ProfessionProvider>
+                <QualitiesProvider>
+                    <Switch>
+                        <Route
+                            path="/users/:userId?/edit"
+                            exact
+                            component={UserEditPage}
+                        />
+                        <Route path="/users/:userId?" exact component={Users} />
+                        <Route path="/login/:type?" component={Login} />
+
+                        <Route path="/" component={Main} />
+                        <Redirect to="/" />
+                    </Switch>
+                </QualitiesProvider>
+            </ProfessionProvider>
             <ToastContainer />
         </div>
     );
