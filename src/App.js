@@ -3,7 +3,6 @@ import Users from "./app/layouts/users";
 import NavBar from "./app/components/ui/navBar";
 import Login from "./app/layouts/login";
 import Main from "./app/layouts/main";
-import UserEditPage from "./app/components/page/userEditPage/userEditPage";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { ProfessionProvider } from "./app/hooks/useProfession";
@@ -13,22 +12,21 @@ function App() {
     return (
         <div>
             <NavBar />
-            <ProfessionProvider>
-                <QualitiesProvider>
+
+            <QualitiesProvider>
+                <ProfessionProvider>
                     <Switch>
                         <Route
-                            path="/users/:userId?/edit"
-                            exact
-                            component={UserEditPage}
+                            path="/users/:userId?/:edit?"
+                            component={Users}
                         />
-                        <Route path="/users/:userId?" exact component={Users} />
                         <Route path="/login/:type?" component={Login} />
-
-                        <Route path="/" component={Main} />
+                        <Route path="/" exact component={Main} />
                         <Redirect to="/" />
                     </Switch>
-                </QualitiesProvider>
-            </ProfessionProvider>
+                </ProfessionProvider>
+            </QualitiesProvider>
+
             <ToastContainer />
         </div>
     );
