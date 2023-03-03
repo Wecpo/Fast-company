@@ -12,6 +12,7 @@ export const QualitiesProvider = ({ children }) => {
     const [isLoading, setloading] = useState(true);
     const [qualities, setQualities] = useState([]);
     const [error, setError] = useState(null);
+
     useEffect(() => {
         if (error !== null) {
             toast(error);
