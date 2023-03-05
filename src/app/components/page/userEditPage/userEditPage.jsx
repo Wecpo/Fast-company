@@ -94,7 +94,6 @@ const UserEditPage = () => {
     useEffect(() => {
         if (data._id) setIsLoading(false);
     }, [data]);
-
     const validatorConfig = {
         email: {
             isRequired: {
