@@ -29,7 +29,6 @@ const NavProfile = () => {
                 <Link to="/logout" className="dropdown-item">
                     Log out
                 </Link>
-                <h1>some text</h1>
             </div>
         </div>
     );

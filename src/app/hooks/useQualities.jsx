@@ -33,19 +33,24 @@ export const QualitiesProvider = ({ children }) => {
         try {
             const { content } = await qualityService.fetchAll();
             setQualities(content);
-            setloading(false);
         } catch (error) {
             errorCatcher(error);
+        } finally {
+            setloading(false);
         }
     }
     function getQuality(id) {
         return qualities.find((qual) => qual._id === id);
     }
-    return (
-        <QualitiesContext.Provider value={{ isLoading, qualities, getQuality }}>
-            {children}
-        </QualitiesContext.Provider>
-    );
+    if (!isLoading) {
+        return (
+            <QualitiesContext.Provider
+                value={{ isLoading, qualities, getQuality }}
+            >
+                {children}
+            </QualitiesContext.Provider>
+        );
+    } else return <p>loading...</p>;
 };
 
 QualitiesProvider.propTypes = {

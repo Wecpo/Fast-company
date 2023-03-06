@@ -27,6 +27,7 @@ const ProtectedRoute = ({ component: Component, children, ...rest }) => {
 
 ProtectedRoute.propTypes = {
     component: PropTypes.func,
+    match: PropTypes.object,
     location: PropTypes.object,
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
