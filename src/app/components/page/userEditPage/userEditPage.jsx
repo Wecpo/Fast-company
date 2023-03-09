@@ -8,7 +8,7 @@ import BackHistoryButton from "../../common/table/backButton";
 import { useProfessions } from "../../../hooks/useProfession";
 import { useQualities } from "../../../hooks/useQualities";
 import { useAuth } from "../../../hooks/useAuth";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const UserEditPage = () => {
     const { currentUser, updateUserData } = useAuth();
@@ -29,13 +29,6 @@ const UserEditPage = () => {
     const history = useHistory();
 
     const [data, setData] = useState(``);
-    const params = useParams();
-
-    useEffect(() => {
-        if (params.userId !== currentUser._id) {
-            history.push(`/users/${currentUser._id}/edit`);
-        }
-    }, []);
 
     function getQualitiesListByIds(qualitiesIds) {
         const qualitiesArray = [];
@@ -67,15 +60,15 @@ const UserEditPage = () => {
         }
     }, [data]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        const dataForUpdate = {
+        await updateUserData({
             ...data,
-            qualities: data.qualities.map((qual) => qual.value)
-        };
-        updateUserData(dataForUpdate);
+            qualities: data.qualities.map((q) => q.value)
+        });
+        history.push(`/users/${currentUser._id}`);
     };
 
     const validatorConfig = {
