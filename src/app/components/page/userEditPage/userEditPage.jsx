@@ -11,12 +11,24 @@ import { useAuth } from "../../../hooks/useAuth";
 import { useHistory, useParams } from "react-router-dom";
 
 const UserEditPage = () => {
-    const { currentUser, updateUser } = useAuth();
-    const { professions } = useProfessions();
-    const { qualities } = useQualities();
-    const history = useHistory();
-    // const [isLoading, setLoading] = useState(true);
+    const { currentUser, updateUserData } = useAuth();
+    const [isLoading, setLoading] = useState(true);
 
+    const { professions, isLoading: professionLoading } = useProfessions();
+    const professionsList = professions.map((professionName) => ({
+        label: professionName.name,
+        value: professionName._id
+    }));
+
+    const { qualities, isLoading: qualitiesLoading } = useQualities();
+    const qualitiesList = qualities.map((p) => ({
+        label: p.name,
+        value: p._id
+    }));
+
+    const history = useHistory();
+
+    const [data, setData] = useState(``);
     const params = useParams();
 
     useEffect(() => {
@@ -25,35 +37,35 @@ const UserEditPage = () => {
         }
     }, []);
 
-    const getQualityByIdFromArray = (qualities, userQualities) => {
-        const dataQualities = [];
-        for (const userQual of userQualities) {
-            for (const qual of qualities) {
-                if (userQual === qual._id) {
-                    dataQualities.push({
-                        value: qual._id,
-                        label: qual.name,
-                        color: qual.color
-                    });
+    function getQualitiesListByIds(qualitiesIds) {
+        const qualitiesArray = [];
+        for (const qualId of qualitiesIds) {
+            for (const quality of qualities) {
+                if (quality._id === qualId) {
+                    qualitiesArray.push(quality);
+                    break;
                 }
             }
         }
-        return dataQualities;
-    };
-
-    const [data, setData] = useState({
-        ...currentUser,
-        _id: currentUser._id,
-        name: currentUser.name,
-        email: currentUser.email,
-        profession: currentUser.profession,
-        sex: currentUser.sex,
-        qualities: getQualityByIdFromArray(qualities, currentUser.qualities)
-    });
-
-    console.log(data);
+        return qualitiesArray;
+    }
 
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        if (!professionLoading && !qualitiesLoading && currentUser && !data) {
+            setData({
+                ...currentUser,
+                qualities: transformData(currentUser.qualities)
+            });
+        }
+    }, [qualitiesLoading, professionLoading, currentUser, data]);
+
+    useEffect(() => {
+        if (data && isLoading) {
+            setLoading(false);
+        }
+    }, [data]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -63,7 +75,7 @@ const UserEditPage = () => {
             ...data,
             qualities: data.qualities.map((qual) => qual.value)
         };
-        updateUser(dataForUpdate);
+        updateUserData(dataForUpdate);
     };
 
     const validatorConfig = {
@@ -100,15 +112,11 @@ const UserEditPage = () => {
     };
 
     const transformData = (data) => {
-        return data.map((qual) => ({ label: qual.name, value: qual._id }));
+        return getQualitiesListByIds(data).map((qual) => ({
+            label: qual.name,
+            value: qual._id
+        }));
     };
-
-    const qualitiesList = transformData(qualities);
-
-    const professionsList = professions.map((professionName) => ({
-        label: professionName.name,
-        value: professionName._id
-    }));
 
     const isValid = Object.keys(errors).length === 0;
 
@@ -117,7 +125,7 @@ const UserEditPage = () => {
             <BackHistoryButton />
             <div className="row">
                 <div className="col-md-6 offset-md-3 shadow p-4">
-                    {Object.keys(professionsList).length > 0 ? (
+                    {!isLoading && Object.keys(professions).length > 0 ? (
                         <form onSubmit={handleSubmit}>
                             <TextField
                                 label="Имя"
