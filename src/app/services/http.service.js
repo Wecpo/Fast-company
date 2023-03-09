@@ -35,10 +35,12 @@ http.interceptors.request.use(
         }
         return config;
     },
+
     function (error) {
         return Promise.reject(error);
     }
 );
+
 function trasformData(data) {
     return data && !data._id
         ? Object.keys(data).map((key) => ({
@@ -69,7 +71,8 @@ const httpService = {
     get: http.get,
     post: http.post,
     put: http.put,
-    delete: http.delete
+    delete: http.delete,
+    patch: http.patch
 };
 
 export default httpService;
