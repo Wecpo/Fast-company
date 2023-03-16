@@ -5,7 +5,6 @@ import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import BackHistoryButton from "../../common/table/backButton";
-import { useProfessions } from "../../../hooks/useProfession";
 import { useAuth } from "../../../hooks/useAuth";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -13,12 +12,17 @@ import {
     getQualities,
     getQualitiesLoadingStatus
 } from "../../../store/qualities";
+import {
+    getProfessions,
+    getProfessionsLoadingStatus
+} from "../../../store/professions";
 
 const UserEditPage = () => {
     const { currentUser, updateUserData } = useAuth();
     const [isLoading, setLoading] = useState(true);
 
-    const { professions, isLoading: professionLoading } = useProfessions();
+    const professions = useSelector(getProfessions());
+    const professionsLoading = useSelector(getProfessionsLoadingStatus());
     const professionsList = professions.map((professionName) => ({
         label: professionName.name,
         value: professionName._id
@@ -51,13 +55,13 @@ const UserEditPage = () => {
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        if (!professionLoading && !qualitiesLoading && currentUser && !data) {
+        if (!professionsLoading && !qualitiesLoading && currentUser && !data) {
             setData({
                 ...currentUser,
                 qualities: transformData(currentUser.qualities)
             });
         }
-    }, [qualitiesLoading, professionLoading, currentUser, data]);
+    }, [qualitiesLoading, professionsLoading, currentUser, data]);
 
     useEffect(() => {
         if (data && isLoading) {
