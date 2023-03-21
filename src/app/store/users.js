@@ -57,6 +57,21 @@ const usersSlice = createSlice({
             state.isLoggedIn = false;
             state.auth = null;
             state.dataLoaded = false;
+        },
+        userDataUpdateRequested: (state) => {
+            state.isLoading = true;
+        },
+        userDataUpdated: (state, action) => {
+            state.isLoading = false;
+            state.entities = state.entities.map((user) => {
+                if (user._id === action.payload._id) {
+                    user = action.payload;
+                }
+                return user;
+            });
+        },
+        updateUserDataFailed: (state, action) => {
+            state.error = action.payload;
         }
     }
 });
@@ -70,7 +85,10 @@ const {
     authRequestSuccess,
     authRequestFailed,
     userCreated,
-    userLoggedOut
+    userLoggedOut,
+    userDataUpdated,
+    updateUserDataFailed,
+    userDataUpdateRequested
 } = actions;
 
 const authRequested = createAction("users/authRequested");
@@ -131,6 +149,16 @@ function createUser(payload) {
         }
     };
 }
+
+export const updateUserData = (payload) => async (dispatch) => {
+    dispatch(userDataUpdateRequested());
+    try {
+        const { content } = await userService.update(payload);
+        dispatch(userDataUpdated(content));
+    } catch (error) {
+        dispatch(updateUserDataFailed(error.message));
+    }
+};
 
 export const loadUsersList = () => async (dispatch) => {
     dispatch(usersRequested());
