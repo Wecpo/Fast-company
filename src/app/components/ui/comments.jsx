@@ -1,34 +1,35 @@
 import { orderBy } from "lodash";
 import React, { useEffect } from "react";
 import CommentsList, { AddCommentForm } from "../common/comments";
-import { useComments } from "../../hooks/useComments";
 import { useDispatch, useSelector } from "react-redux";
 import {
     getComments,
     getCommentsLoadingStatus,
-    loadCommentsList
+    loadCommentsList,
+    createComment,
+    removeComment
 } from "../../store/comments";
 import { useParams } from "react-router-dom";
+import { getCurrentUserId } from "../../store/users";
 
 const Comments = () => {
     const { userId } = useParams();
     const dispatch = useDispatch();
+    const currentUserId = useSelector(getCurrentUserId());
 
     useEffect(() => {
         dispatch(loadCommentsList(userId));
     }, [userId]);
 
     const isLoading = useSelector(getCommentsLoadingStatus());
-    const { createComment, removeComment } = useComments();
-
     const comments = useSelector(getComments());
 
-    const handleSubmit = (data) => {
-        createComment(data);
+    const handleRemoveComment = (id) => {
+        dispatch(removeComment(id));
     };
 
-    const handleRemoveComment = (id) => {
-        removeComment(id);
+    const handleAddComment = (comment) => {
+        dispatch(createComment(comment));
     };
 
     const sortedComments = orderBy(comments, ["created_at"], ["desc"]);
@@ -37,7 +38,11 @@ const Comments = () => {
         <>
             <div className="card mb-2">
                 <div className="card-body ">
-                    <AddCommentForm onSubmit={handleSubmit} />
+                    <AddCommentForm
+                        handleAddComment={handleAddComment}
+                        userId={userId}
+                        currentUserId={currentUserId}
+                    />
                 </div>
             </div>
             <div className="card mb-3">

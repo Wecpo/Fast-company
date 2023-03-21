@@ -2,8 +2,9 @@ import PropTypes from "prop-types";
 import React, { useState } from "react";
 import TextAreaField from "../form/texAreaField";
 import { validator } from "../../../utils/validator";
+import { nanoid } from "nanoid";
 
-const AddCommentForm = ({ onSubmit }) => {
+const AddCommentForm = ({ handleAddComment, userId, currentUserId }) => {
     const [data, setData] = useState({});
     const [errors, setErrors] = useState({});
     const handleChange = (target) => {
@@ -17,6 +18,7 @@ const AddCommentForm = ({ onSubmit }) => {
             }
         }
     };
+
     const validate = () => {
         const errors = validator(data, validatorConfig);
         setErrors(errors);
@@ -32,7 +34,14 @@ const AddCommentForm = ({ onSubmit }) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        onSubmit(data);
+        const comment = {
+            ...data,
+            _id: nanoid(),
+            pageId: userId,
+            created_at: Date.now(),
+            userId: currentUserId
+        };
+        handleAddComment(comment);
         clearForm();
     };
 
@@ -56,7 +65,9 @@ const AddCommentForm = ({ onSubmit }) => {
 };
 
 AddCommentForm.propTypes = {
-    onSubmit: PropTypes.func
+    handleAddComment: PropTypes.func,
+    userId: PropTypes.string,
+    currentUserId: PropTypes.string
 };
 
 export default AddCommentForm;
