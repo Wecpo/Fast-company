@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAction, createSlice } from "@reduxjs/toolkit";
 import commentService from "../services/comment.service";
 
 const commentsSlice = createSlice({
@@ -41,6 +41,9 @@ const {
     commentRemoved
 } = actions;
 
+const addCommentRequested = createAction("comments/addCommentRequested");
+const removeCommentRequested = createAction("comments/addCommentRequested");
+
 export const loadCommentsList = (userId) => async (dispatch) => {
     dispatch(commentsRequested());
     try {
@@ -52,22 +55,24 @@ export const loadCommentsList = (userId) => async (dispatch) => {
 };
 
 export const createComment = (data) => async (dispatch) => {
+    dispatch(addCommentRequested());
     try {
         const { content } = await commentService.createComment(data);
         dispatch(commentCreated(content));
     } catch (error) {
-        console.log(error);
+        dispatch(commentsRequestFailed(error.message));
     }
 };
 
 export const removeComment = (commentId) => async (dispatch) => {
+    dispatch(removeCommentRequested());
     try {
         const { content } = await commentService.removeComment(commentId);
         if (content === null) {
             dispatch(commentRemoved(commentId));
         }
     } catch (error) {
-        console.log(error);
+        dispatch(commentsRequestFailed(error.message));
     }
 };
 

@@ -5,7 +5,6 @@ import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import BackHistoryButton from "../../common/table/backButton";
-import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
     getQualities,
@@ -34,8 +33,6 @@ const UserEditPage = () => {
         label: p.name,
         value: p._id
     }));
-
-    const history = useHistory();
 
     const [data, setData] = useState(``);
 
@@ -79,7 +76,6 @@ const UserEditPage = () => {
                 qualities: data.qualities.map((q) => q.value)
             })
         );
-        history.push(`/users/${currentUser._id}`);
     };
 
     const validatorConfig = {
