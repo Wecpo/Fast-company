@@ -42,7 +42,7 @@ const {
 } = actions;
 
 const addCommentRequested = createAction("comments/addCommentRequested");
-const removeCommentRequested = createAction("comments/addCommentRequested");
+const removeCommentRequested = createAction("comments/removeCommentRequested");
 
 export const loadCommentsList = (userId) => async (dispatch) => {
     dispatch(commentsRequested());
