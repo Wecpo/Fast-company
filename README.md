@@ -1,6 +1,8 @@
 Учебный курсовой проект.
 
-Социальная сеть на React, JS, redux.
+Социальная сеть на React, JS, Redux. 
+С использованием propTypes, react-select, react-toastify, axios, lodash, bootstrap.
 
-npm i
+npm i,
+
 npm start
